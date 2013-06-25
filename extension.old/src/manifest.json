@@ -1,0 +1,14 @@
+{
+    "name": "Sidekick for Programmers"
+  , "version": "0.1"
+  , "background": {
+      "scripts": ["background.js"]
+    }
+  , "permissions": [
+      "tabs", "http://*/*"
+    ]
+  , "browser_action": {
+    "name": "Click to enable Sidekick"
+  }
+  , "manifest_version": 2
+}

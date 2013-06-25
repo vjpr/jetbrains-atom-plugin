@@ -1,0 +1,14 @@
+include mixins
+!!!
+html
+  head
+    title= title
+    //- If you work with "Disable Cache" enabled in your browser, this line will
+      cause a web request every time. To speed up your dev workflow,
+      require jquery in `application.js` and comment out this line.
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js')
+    script(src='/socket.io/socket.io.js')
+    != js('application.js')
+    != css('style.css')
+  body
+    block main

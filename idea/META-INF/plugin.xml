@@ -1,0 +1,32 @@
+<idea-plugin version="2">
+  <name>Sidekick for Programmers</name>
+  <description>Displays contextual information about the current file you are viewing.</description>
+  <version>1.0</version>
+  <vendor url="https://sidekick.io/programmers">Sidekick</vendor>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="107.105"/>
+
+  <application-components>
+    <component>
+      <implementation-class>sidekick.SidekickComponent</implementation-class>
+    </component>
+  </application-components>
+
+  <project-components>
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+    <group id="Sidekick" text="_Sidekick" description="Sample menu">
+      <add-to-group group-id="MainMenu" anchor="first"  />
+      <action id="Sidekick.Test" class="sidekick.Test" text="_Sidekick" description="A test menu item">
+        <keyboard-shortcut first-keystroke="control shift P" keymap="$default"/>
+      </action>
+    </group>
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+</idea-plugin>

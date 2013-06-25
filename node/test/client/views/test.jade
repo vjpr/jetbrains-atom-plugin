@@ -1,0 +1,10 @@
+html
+head
+  meta(charset="utf8")
+  title Tests
+  != css('test.css')
+body
+  #mocha
+  != js('test.js')
+  :coffeescript
+    $(document).ready -> mocha.run()
