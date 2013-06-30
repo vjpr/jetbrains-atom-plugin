@@ -67,8 +67,8 @@ payloadLogging = (ctx) ->
 
 setupSockets = (ctx) ->
 
-  clientSocket = null
-  pluginSocket = null
+  ctx.clientSocket = null
+  ctx.pluginSocket = null
 
   # IntelliJ <-> Node
   ws = require 'websocket.io'
@@ -82,15 +82,17 @@ setupSockets = (ctx) ->
       switch data.method
         when 'FileEditorEvent.SelectionChanged'
           console.log "Sending"
-          clientSocket.emit 'fileOpen', data.params
+          ctx.clientSocket.emit 'fileOpen', data.params
+        when 'CaretEvent.PositionChanged'
+          ctx.clientSocket.emit 'CaretEvent.PositionChanged', data.params
 
   # Node <-> Browser
   ctx.app.on 'server:listening', (server) =>
     SocketsManager = require 'live/sockets/socketsManager'
     sm = new SocketsManager server, ctx.sessionStore,
       onConnection: (socket) =>
-        clientSocket = socket
+        ctx.clientSocket = socket
         SocketsConnection = require 'sockets/socketsConnection'
         new SocketsConnection socket
     SocketsService = require 'services/socketsService'
-    ctx.socketsService = new SocketsService sm.io, pluginSocket
+    ctx.socketsService = new SocketsService sm.io, ctx

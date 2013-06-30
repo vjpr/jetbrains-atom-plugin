@@ -2,7 +2,7 @@
 
 module.exports = class SocketService
 
-  constructor: (@io, @pluginSocket) ->
+  constructor: (@io, ctx) ->
 
     # DEBUG: Send some messages on load.
     @io.on 'connection', (socket) ->
@@ -10,6 +10,15 @@ module.exports = class SocketService
         redirect: "http://www.scala-lang.org/api/current/index.html#scala.actors.Reactor"
       socket.on 'message', (q, fn) ->
         console.log q
+      socket.on 'insertText', (data) ->
+        console.log data
+        ctx.pluginSocket.send method: 'fileChanged', params: data
+      socket.on 'document:change', (data) ->
+        console.log data
+        ctx.pluginSocket.send JSON.stringify
+          method: 'documentChanged'
+          params: data
+
     # ---
 
   reloadExtension: =>

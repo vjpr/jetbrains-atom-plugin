@@ -14,7 +14,7 @@ import com.intellij.openapi.fileEditor._
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.actionSystem.{DataKeys, PlatformDataKeys}
 import com.intellij.ide.DataManager
-import com.intellij.openapi.editor.event.{CaretEvent, CaretListener}
+import com.intellij.openapi.editor.event.{DocumentEvent, DocumentListener, CaretEvent, CaretListener}
 import sidekick.Socket._
 import com.intellij.openapi.project.{Project, ProjectManager}
 import com.intellij.util.messages.{MessageBusConnection, MessageBus}
@@ -92,7 +92,23 @@ class SidekickFileEditorManagerListener extends FileEditorManagerAdapter with Lo
     val document = editor.getDocument
     val psiFile = PsiDocumentManager.getInstance(project).getCachedPsiFile(document)
 
-    //val method = GetMethodName(editor, psiFile)
+    // Add listener to file changes.
+    editor.getDocument.addDocumentListener(new DocumentListener {
+      def beforeDocumentChange(event: DocumentEvent) {}
+      def documentChanged(event: DocumentEvent) {}
+    })
+
+    // Add listener to cursor changes.
+    editor.getCaretModel.addCaretListener(new CaretListener {
+      def caretPositionChanged(e: CaretEvent) {
+        val selectedMethod = GetMethodName(e.getEditor, psiFile)
+        log info e.toString
+        log info selectedMethod.toString
+        val json = write(selectedMethod)
+        Socket.send("CaretEvent.PositionChanged", json)
+      }
+    })
+
     val o =
       ("file" -> event.getNewFile.toString) ~
       ("editor" -> event.getNewEditor.toString) ~

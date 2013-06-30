@@ -16,6 +16,8 @@
     "jquery.slimscroll": "~1.2.0",
     "jquery-ui": "~1.10.3",
     "font-awesome": "~3.1.1",
-    "CodeMirror": "~3.14.0"
+    "CodeMirror": "~3.14.0",
+    "ace-builds": "~1.1.01",
+    "requirejs": "~2.1.6"
   }
 }

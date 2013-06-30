@@ -1,0 +1,3 @@
+.block
+  .doc: p= doc
+  .editor &nbsp;

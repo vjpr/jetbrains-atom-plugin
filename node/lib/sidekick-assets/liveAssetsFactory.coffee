@@ -40,7 +40,7 @@ module.exports = class LiveAssetsFactory
       afterEnvironmentCreated: ->
 
         Mincer = @getMincer()
-        Mincer.Template.cacheDir = path.join process.cwd(), 'tmp/mincer'
+        #Mincer.Template.cacheDir = path.join process.cwd(), 'tmp/mincer'
 
         # Use IcedCoffeeScript instead of CoffeeScript
         @env.registerEngine '.coffee', IcedCoffeeEngine

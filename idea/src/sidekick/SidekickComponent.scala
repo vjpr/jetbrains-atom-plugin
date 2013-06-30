@@ -5,7 +5,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.application.ApplicationManager
 
 import Implicits._
-import com.intellij.openapi.vfs.{VirtualFileManager, VirtualFile}
+import com.intellij.openapi.vfs.{LocalFileSystem, VirtualFileManager, VirtualFile}
 import com.intellij.openapi.project.{ProjectManagerListener, ProjectManager, Project}
 import com.intellij.psi.search.{GlobalSearchScope, FilenameIndex}
 import java.io.File
@@ -13,23 +13,31 @@ import org.jfarcand.wcs.{BinaryListener, MessageListener, WebSocket}
 import java.net.ConnectException
 import java.util
 import util.concurrent.ExecutionException
-import actors.{TIMEOUT, Actor}
 import sun.jvm.hotspot.runtime.Bytes
 import com.codahale.jerkson.Json
 import scala.Predef._
 import net.liftweb.json.DefaultFormats
-import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.actionSystem.{DataConstants, DataKeys, DataContext, PlatformDataKeys}
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import com.intellij.openapi.fileEditor.{FileDocumentManagerListener, FileDocumentManager}
 import com.intellij.ide.DataManager
 import com.intellij.openapi.Disposable
+import scala.actors.{TIMEOUT, Actor}
+import net.liftweb.json.JsonAST.JValue
+import scala.tools.cmd
+import net.liftweb.json
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.psi.PsiManager
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.lang.javascript.psi.impl.JSPropertyImpl
 
 trait Logging {
   val log: Logger = Logger.getInstance(getClass)
 }
 
 class SidekickComponent extends ApplicationComponent with Logging {
+
 
   def initComponent {
     Socket.connect
@@ -154,9 +162,48 @@ class MessageRouter extends Logging {
         log info cmd.extract[OpenFileCommand].toString
         FileNavigator findAndNavigate cmd.extract[OpenFileCommand]
       }
+      case "fileChanged" => {
+        val cmd = json \ "params"
+        log info cmd.toString
+      }
+      case "documentChanged" => {
+        val cmd = json \ "params"
+        log info cmd.toString
+        DocumentUpdater update cmd
+      }
     }
   }
 
+}
+
+case class UpdateElementCommand(
+  body: String,
+  path: String,
+  offset: Integer,
+  to: Integer
+)
+
+object DocumentUpdater extends Logging {
+  def update(cmd: JValue) = {
+    val command = cmd.extract[UpdateElementCommand]
+    val vf = LocalFileSystem.getInstance().findFileByPath(command.path)
+
+    ApplicationManager.getApplication().invokeLater { () =>
+      val dataContext = DataManager.getInstance.getDataContext()
+      val currentProject = PlatformDataKeys.PROJECT.getData(dataContext)
+      val doc = FileDocumentManager.getInstance.getDocument(vf)
+      ApplicationManager.getApplication.runWriteAction { () =>
+        doc.replaceString(command.offset.asInstanceOf[Int], command.to.asInstanceOf[Int], command.body)
+      }
+      //val psiFile = PsiManager.getInstance(currentProject).findFile(vf)
+      //val el = psiFile.getViewProvider.findElementAt(command.offset)
+      //val method = PsiTreeUtil.getParentOfType(el, classOf[JSPropertyImpl])
+      //System.out.println('element, method)
+    }
+
+    //val doc = FileDocumentManager.getInstance().getDocument(vf)
+    //val editors = EditorFactory.getInstance().getEditors(doc)
+  }
 }
 
 object FileNavigator {
