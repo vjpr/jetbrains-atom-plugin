@@ -1,14 +1,13 @@
-# Sidekick for Programmers
+# JetBrains IDE Atom Plugin
 
-Run `cd node; make`
+See https://github.com/vjpr/atom-webstorm
 
-Build from IntelliJ build target (use Debug with JRebel).
+## Dev
 
-Open `localhost:3000`
+http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/setting_up_environment.html
 
-## Update plugin dependencies
+Use JRebel for live updating.
 
-Idea plugin depends on `lib_managed` which is updated when running `sbt update`.
+### Update plugin dependencies
 
-    cd idea
-    sbt update
+Depends on `lib_managed` which is updated when running `sbt update`.

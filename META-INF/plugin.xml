@@ -8,6 +8,7 @@
   <idea-version since-build="107.105"/>
 
   <depends>JavaScript</depends>
+  <depends>com.intellij.modules.lang</depends>
 
   <application-components>
     <component>
@@ -21,8 +22,11 @@
   <actions>
     <!-- Add your actions here -->
     <group id="Sidekick" text="_Sidekick" description="Sample menu">
-      <add-to-group group-id="MainMenu" anchor="first"  />
-      <action id="Sidekick.Test" class="sidekick.Test" text="_Sidekick" description="A test menu item">
+      <add-to-group group-id="MainMenu" anchor="first"/>
+      <action id="Sidekick.Test"
+        class="sidekick.Test"
+        text="_Sidekick"
+        description="A test menu item">
         <keyboard-shortcut first-keystroke="control shift P" keymap="$default"/>
       </action>
     </group>
