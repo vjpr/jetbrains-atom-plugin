@@ -1,21 +1,14 @@
 # Sidekick for Programmers
 
-## Extensions (deprecated)
+Run `cd node; make`
 
-    cd extension
-    stasis -d
-    
-Add unpacked extension to Chrome `/extension/lib`
+Build from IntelliJ build target (use Debug with JRebel).
 
-## App (deprecated)
+Open `localhost:3000`
 
-    cd app
-    ./run
-    guard
+## Update plugin dependencies
 
-## IntelliJ Plugin
+Idea plugin depends on `lib_managed` which is updated when running `sbt update`.
 
     cd idea
     sbt update
-    
-Build from IntelliJ

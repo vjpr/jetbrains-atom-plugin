@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/idea/idea.iml" filepath="$PROJECT_DIR$/idea/idea.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sidekick-programmers.iml" filepath="$PROJECT_DIR$/sidekick-programmers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jetbrains-atom-plugin.iml" filepath="$PROJECT_DIR$/jetbrains-atom-plugin.iml" />
     </modules>
   </component>
 </project>
-

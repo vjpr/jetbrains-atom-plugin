@@ -1,6 +1,0 @@
---compilers coffee:iced-coffee-script
---reporter spec
---recursive
---timeout 5000
---require sugar
-test/server
